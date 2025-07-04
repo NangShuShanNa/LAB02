@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import EventCard from '@/components/EventCard.vue';
+  import CategoryOrganizer from '@/components/CategoryOrganizer.vue';
   import type { Event } from '@/type'
 import { ref } from 'vue'
 const events = ref<Event[]>( [
@@ -41,7 +42,10 @@ const events = ref<Event[]>( [
 
 <template>
   <div class="events">
-    <EventCard v-for="event in events" :key="event.id" :event="event"/>
+    <div v-for="event in events" :key="event.id" class="event-item">
+      <EventCard :event="event"/>
+      <CategoryOrganizer :event="event"/>
+    </div>
   </div>
 </template>
 
@@ -50,5 +54,11 @@ const events = ref<Event[]>( [
     display: flex;
     flex-direction: column;
     align-items: center;
-    }
-    </style>
+    gap: 1rem;  /* Added for better spacing */
+}
+
+.event-item {
+  width: 100%;
+  max-width: 250px; /* Should match your EventCard width */
+}
+</style>

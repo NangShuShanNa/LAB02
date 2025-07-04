@@ -1,16 +1,15 @@
 <script setup lang="ts">
-  import EventCard from '@/components/EventCard.vue';
-  import CategoryOrganizer from '@/components/CategoryOrganizer.vue';
-  import type { Event } from '@/type'
-
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import EventService from '@/services/EventService'
+import EventCard from '@/components/EventCard.vue'
+import CategoryOrganizer from '@/components/CategoryOrganizer.vue'
+import type { Event } from '@/type'
 
-const events = ref<Event[]>()
+// ✅ Always start with an empty array to avoid undefined access
+const events = ref<Event[]>([])
 
 onMounted(() => {
-  axios
-    .get('https://my-json-server.typicode.com/NangShuShanNa/CompoNewLab02/events')
+  EventService.getEvents()
     .then((response) => {
       events.value = response.data
     })
@@ -18,30 +17,30 @@ onMounted(() => {
       console.error('There was an error!', error)
     })
 })
-
 </script>
 
 <template>
+  <div>
     <h1>Events For Good</h1>
-    <!--new element-->
-  <div class="events">
-    <div v-for="event in events" :key="event.id" class="event-item">
-      <EventCard :event="event"/>
-      <CategoryOrganizer :event="event"/>
+    <div class="events">
+      <div v-for="event in events" :key="event.id" class="event-item">
+        <EventCard :event="event" />
+        <CategoryOrganizer :event="event" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .events {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;  /* Added for better spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .event-item {
   width: 100%;
-  max-width: 250px; /* Should match your EventCard width */
+  max-width: 250px;
 }
 </style>

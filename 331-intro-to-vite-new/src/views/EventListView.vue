@@ -4,10 +4,15 @@ import EventService from '@/services/EventService'
 import CategoryOrganizer from '@/components/CategoryOrganizer.vue'
 import {type Event} from '@/types'
 import EventCard from '@/components/EventCard.vue'
+import { watchEffect } from 'vue'
 
 // Reactive state
 const events = ref<Event[] | null>(null)
-
+const totalEvents = ref<number>(0) // Initialize with 0 or appropriate default
+const hasNextPage = computed(() => {
+  const totalPages = Math.ceil(totalEvents.value / 2) // Assuming 2 items per page
+  return page.value < totalPages
+})
 // Props from route
 const props = defineProps({
   page: {
@@ -16,18 +21,23 @@ const props = defineProps({
   }
 })
 
+
 // Computed page number
 const page = computed(() => props.page)
 
 // Load events on mount
 onMounted(() => {
-  EventService.getEvents(2, page.value) // 2 items per page
+  watchEffect(() => {
+  events.value = []
+  EventService.getEvents(2, page.value)
     .then((response) => {
       events.value = response.data
+      totalEvents.value = response.headers['x-total-count']
     })
     .catch((error) => {
       console.error('There was an error!', error)
     })
+})
 })
 </script>
 
@@ -44,22 +54,26 @@ onMounted(() => {
 
     <div class="pagination">
       <RouterLink
+        id="page-prev"
         :to="{ name: 'event-list-view', query: { page: page - 1 } }"
         rel="prev"
         v-if="page !== 1"
       >
-        Prev Page
+        &#60; Prev Page
       </RouterLink>
 
       <RouterLink
+        id="page-next"
         :to="{ name: 'event-list-view', query: { page: page + 1 } }"
         rel="next"
+        v-if="hasNextPage"
       >
-        Next Page
+        Next Page &#62;
       </RouterLink>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .events {
@@ -80,5 +94,28 @@ onMounted(() => {
   justify-content: center;
   gap: 1.5rem;
   font-weight: bold;
+}
+
+/* ➕ New pagination layout */
+.pagination {
+  display: flex;
+  width: 290px;
+}
+
+/* ➕ Style individual links */
+.pagination a {
+  flex: 1;
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+/* ➕ Positioning left/right */
+#page-prev {
+  text-align: left;
+}
+
+#page-next {
+  text-align: right;
 }
 </style>

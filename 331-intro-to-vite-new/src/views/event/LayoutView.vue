@@ -25,11 +25,11 @@ onMounted(() => {
     <h1>{{ event.title }}</h1>
 
     <nav>
-      <RouterLink :to="{ name: 'event-detail-view', params: { id: route.params.id } }">Details</RouterLink>
+      <RouterLink :to="{ name: 'event-detail-view' }">Details</RouterLink>
       |
-      <RouterLink :to="{ name: 'event-register-view', params: { id: route.params.id } }">Register</RouterLink>
+      <RouterLink :to="{ name: 'event-register-view' }">Register</RouterLink>
       |
-      <RouterLink :to="{ name: 'event-edit-view', params: { id: route.params.id } }">Edit</RouterLink>
+      <RouterLink :to="{ name: 'event-edit-view' }">Edit</RouterLink>
     </nav>
 
     <!-- Render child component -->

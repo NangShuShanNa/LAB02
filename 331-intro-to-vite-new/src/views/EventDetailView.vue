@@ -9,6 +9,7 @@ const id = ref<number>(5928101)
 onMounted(() => {
   EventService.getEvent(id.value)
       .then((response) => {
+
         event.value = response.data
       })
       .catch((error) => {

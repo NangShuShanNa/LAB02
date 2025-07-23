@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import EventService from '@/services/EventService'
-import EventCard from '@/components/EventCard.vue'
 import CategoryOrganizer from '@/components/CategoryOrganizer.vue'
 import type { Event } from '@/type'
+import EventCard from '@/components/EventCard.vue'
+
 
 // ✅ Always start with an empty array to avoid undefined access
 const events = ref<Event[]>([])

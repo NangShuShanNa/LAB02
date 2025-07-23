@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Event } from '@/type'
+
+import {type Event} from '@/type'
 defineProps<{
   event: Event
 }>()

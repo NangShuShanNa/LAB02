@@ -13,8 +13,10 @@ const props = withDefaults(
 
 <template>
   <div>
-    <h1>Opps!</h1>
-    <h3>The page uou are looking for is not here</h3>
-    <router-link :to="{ name: 'event-list-view' }">Back to Home Page</router-link>
+    <h1>Oops!</h1>
+    <h3>The {{ resource }} you're looking for is not here.</h3>
+    <router-link :to="{ name: 'event-list-view' }">
+      Back to the home page
+    </router-link>
   </div>
 </template>

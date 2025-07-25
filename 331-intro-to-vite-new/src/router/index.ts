@@ -9,6 +9,10 @@ import EventLayoutView from '@/views/event/LayoutView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import NetworkErrorView from '@/views/NetworkErrorView.vue'
 
+// ✅ Add NProgress support
+import nProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,29 +56,36 @@ const router = createRouter({
       component: AboutView
     },
     {
-  path: '/404/:resource',
-  name: '404-resource-view',
-  component: NotFoundView,
-  props: true
-},
-{
-  path: '/network-error',
-  name: 'network-error-view',
-  component: NetworkErrorView,
-},
-
-
+      path: '/students',
+      name: 'Students',
+      component: StudentListView
+    },
+    {
+      path: '/404/:resource',
+      name: '404-resource-view',
+      component: NotFoundView,
+      props: true
+    },
+    {
+      path: '/network-error',
+      name: 'network-error-view',
+      component: NetworkErrorView
+    },
     {
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: NotFoundView
-    },
-    {
-      path: '/students',
-      name: 'Students',
-      component: StudentListView
     }
   ]
+})
+
+// ✅ Global loading bar for every route change
+router.beforeEach(() => {
+  nProgress.start()
+})
+
+router.afterEach(() => {
+  nProgress.done()
 })
 
 export default router

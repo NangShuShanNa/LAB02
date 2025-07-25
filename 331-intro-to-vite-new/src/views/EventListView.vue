@@ -5,6 +5,7 @@ import CategoryOrganizer from '@/components/CategoryOrganizer.vue'
 import { type Event } from '@/types'
 import EventCard from '@/components/EventCard.vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
+import nProgress from 'nprogress' // ✅ Import progress bar
 
 const route = useRoute()
 const router = useRouter()
@@ -12,7 +13,7 @@ const router = useRouter()
 // Reactive state
 const events = ref<Event[] | null>(null)
 const totalEvents = ref<number>(0)
-const customPageSize = ref<number>(Number(route.query.size) || 2) // Default to 2
+const customPageSize = ref<number>(Number(route.query.size) || 2)
 
 // Props from route
 const props = defineProps({
@@ -31,19 +32,21 @@ const hasNextPage = computed(() => {
 
 // Function to update page size
 const updatePageSize = () => {
-  // Validate input (minimum 1, maximum 100)
   const size = Math.min(Math.max(1, customPageSize.value), 100)
   customPageSize.value = size
 
   router.push({
     name: 'event-list-view',
-    query: { ...route.query, size, page: 1 } // Reset to page 1 when changing size
+    query: { ...route.query, size, page: 1 }
   })
 }
 
-// Fetch events function
+// Fetch events with progress indicator
 const fetchEvents = () => {
   events.value = []
+
+  nProgress.start() // ✅ Start loading bar
+
   EventService.getEvents(customPageSize.value, page.value)
     .then((response) => {
       events.value = response.data
@@ -51,6 +54,10 @@ const fetchEvents = () => {
     })
     .catch((error) => {
       console.error('There was an error!', error)
+      router.push({ name: 'network-error-view' }) // Optional: redirect to error view
+    })
+    .finally(() => {
+      nProgress.done() // ✅ Stop loading bar
     })
 }
 

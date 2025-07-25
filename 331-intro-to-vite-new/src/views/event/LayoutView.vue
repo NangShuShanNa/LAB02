@@ -1,30 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { type Event } from '@/types'
-import EventService from '@/services/EventService'
+import { useEventStore } from '@/stores/event'
+import { storeToRefs } from 'pinia'
 
-const router = useRouter()
-const route = useRoute()
-const event = ref<Event | null>(null)
-
-onMounted(() => {
-  const id = route.params.id as string
-  EventService.getEvent(parseInt(id))
-    .then((response) => {
-      event.value = response.data
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 404) {
-        router.push({
-          name: '404-resource-view',
-          params: { resource: 'event' }
-        })
-      } else {
-        router.push({ name: 'network-error-view' })
-      }
-    })
-})
+const store = useEventStore()
+const { event } = storeToRefs(store) // ✅ get the event from the store
 </script>
 
 <template>
@@ -39,7 +18,7 @@ onMounted(() => {
       <RouterLink :to="{ name: 'event-edit-view' }">Edit</RouterLink>
     </nav>
 
-    <!-- Render child view -->
+    <!-- Pass event to nested routes -->
     <RouterView :event="event" />
   </div>
 </template>

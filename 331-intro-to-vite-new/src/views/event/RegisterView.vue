@@ -2,8 +2,12 @@
 import { toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { type Event } from '@/types'
+import { useMessageStore } from '@/stores/message'
+
+
 
 // Define props for event and id
+
 const props = defineProps<{
   event: Event
   id: string
@@ -14,12 +18,21 @@ const { event, id } = toRefs(props)
 
 // Create router instance
 const router = useRouter()
-
+const store = useMessageStore()
 // Register handler
 const register = () => {
-  // If the registration API call successful (simulate here)
-  // Push back to the event details view
-  router.push({ name: 'event-detail-view', params: { id: id.value } })
+   store.updateMessage('You are successfully registered for ' + props.event.title)
+
+  // ✅ Reset the message after 3 seconds
+  setTimeout(() => {
+    store.resetMessage()
+  }, 3000)
+
+  // ✅ Navigate to event details page
+  router.push({
+    name: 'event-detail-view',
+    params: { id: props.event.id }
+  })
 }
 </script>
 

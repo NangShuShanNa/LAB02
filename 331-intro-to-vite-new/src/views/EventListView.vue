@@ -43,7 +43,7 @@ const updatePageSize = () => {
 
 // Fetch events with progress indicator
 const fetchEvents = () => {
-  events.value = []
+
 
   nProgress.start() // ✅ Start loading bar
 

@@ -11,13 +11,22 @@ import NetworkErrorView from '@/views/NetworkErrorView.vue'
 import EventService from '@/services/EventService'
 import { useEventStore } from '@/stores/event'
 
-
 // ✅ Add NProgress support
 import nProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
+  // ✅ Add scroll behavior
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
+
   routes: [
     {
       path: '/',
@@ -32,29 +41,27 @@ const router = createRouter({
       name: 'event-layout-view',
       component: EventLayoutView,
       props: true,
-
       beforeEnter: (to) => {
-  const id = parseInt(to.params.id as string)
-  const eventStore = useEventStore()
+        const id = parseInt(to.params.id as string)
+        const eventStore = useEventStore()
 
-  return EventService.getEvent(id)
-    .then((response) => {
-      // ✅ Save the data into the store
-      eventStore.setEvent(response.data)
-      return true
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 404) {
-        return {
-          name: '404-resource-view',
-          params: { resource: 'event' }
-        }
-      } else {
-        return { name: 'network-error-view' }
-      }
-    })
-}
-,
+        return EventService.getEvent(id)
+          .then((response) => {
+            // ✅ Save the data into the store
+            eventStore.setEvent(response.data)
+            return true
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 404) {
+              return {
+                name: '404-resource-view',
+                params: { resource: 'event' }
+              }
+            } else {
+              return { name: 'network-error-view' }
+            }
+          })
+      },
       children: [
         {
           path: '',

@@ -5,7 +5,7 @@ import CategoryOrganizer from '@/components/CategoryOrganizer.vue'
 import { type Event } from '@/types'
 import EventCard from '@/components/EventCard.vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import nProgress from 'nprogress' // ✅ Import progress bar
+import nProgress from 'nprogress'
 
 const route = useRoute()
 const router = useRouter()
@@ -13,7 +13,7 @@ const router = useRouter()
 // Reactive state
 const events = ref<Event[] | null>(null)
 const totalEvents = ref<number>(0)
-const customPageSize = ref<number>(Number(route.query.size) || 2)
+const customPageSize = ref<number>(3) // ✅ Default to 3
 
 // Props from route
 const props = defineProps({
@@ -23,14 +23,15 @@ const props = defineProps({
   }
 })
 
-// Computed properties
+// Computed values
 const page = computed(() => props.page)
+
 const hasNextPage = computed(() => {
-  const totalPages = Math.ceil(totalEvents.value / customPageSize.value)
+  const totalPages = Math.ceil(totalEvents.value / 3) // ✅ Adjusted
   return page.value < totalPages
 })
 
-// Function to update page size
+// Update page size via query
 const updatePageSize = () => {
   const size = Math.min(Math.max(1, customPageSize.value), 100)
   customPageSize.value = size
@@ -41,30 +42,29 @@ const updatePageSize = () => {
   })
 }
 
-// Fetch events with progress indicator
+// Fetch event data
 const fetchEvents = () => {
+  nProgress.start()
 
-
-  nProgress.start() // ✅ Start loading bar
-
-  EventService.getEvents(customPageSize.value, page.value)
+  EventService.getEvents(3, page.value) // ✅ Fixed to use 3
     .then((response) => {
       events.value = response.data
       totalEvents.value = Number(response.headers['x-total-count']) || 0
     })
     .catch((error) => {
       console.error('There was an error!', error)
-      router.push({ name: 'network-error-view' }) // Optional: redirect to error view
+      router.push({ name: 'network-error-view' })
     })
     .finally(() => {
-      nProgress.done() // ✅ Stop loading bar
+      nProgress.done()
     })
 }
 
-// Load events on mount and when page/size changes
+// Init fetch
 onMounted(fetchEvents)
 watchEffect(fetchEvents)
 </script>
+
 
 <template>
   <div>

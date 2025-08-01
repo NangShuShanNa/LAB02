@@ -8,78 +8,70 @@ const { message } = storeToRefs(store)
 </script>
 
 <template>
-  <div id="text-center font-sans text-gray-700 antialiased">
-    <header>
-      <div id="flashMessage" v-if="message">
-        <h4>{{ message }}</h4>
+  <div class="min-h-screen flex flex-col items-center font-sans text-gray-700 antialiased bg-gray-50">
+    <!-- Header -->
+    <header class="w-full max-w-4xl text-center">
+      <!-- Flash Message -->
+      <div
+        v-if="message"
+        class="animate-fade bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg shadow-sm mb-6 mx-auto max-w-md"
+      >
+        <h4 class="font-medium">{{ message }}</h4>
       </div>
+
+      <!-- Navigation -->
       <div class="wrapper">
-        <nav class="py-6">
+        <nav class="py-6 space-x-4">
           <RouterLink
-            class="font-bold text-gray-700"
+            class="px-3 py-2 font-bold text-gray-700 hover:text-green-500 transition-colors"
             exact-active-class="text-green-500"
             :to="{ name: 'event-list-view' }"
-          >Event</RouterLink>
-          |
+          >
+            Events
+          </RouterLink>
           <RouterLink
-            class="font-bold text-gray-700"
+            class="px-3 py-2 font-bold text-gray-700 hover:text-green-500 transition-colors"
             exact-active-class="text-green-500"
             :to="{ name: 'about' }"
-          >About</RouterLink>
-          |
+          >
+            About
+          </RouterLink>
           <RouterLink
-            class="font-bold text-gray-700"
+            class="px-3 py-2 font-bold text-gray-700 hover:text-green-500 transition-colors"
             exact-active-class="text-green-500"
             :to="{ name: 'Students' }"
-          >Students</RouterLink>
+          >
+            Students
+          </RouterLink>
         </nav>
       </div>
     </header>
 
-    <RouterView />
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl flex-grow px-4 py-6">
+      <RouterView class="flex flex-col items-center" />
+    </main>
   </div>
 </template>
 
 <style>
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-h2 {
-  font-size: 20px;
-}
-
-.event-card {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin: 10px auto;
-  width: 300px;
-  text-align: center;
+/* Animation for flash message */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes yellowfade {
-  from {
-    background-color: yellow;
-  }
-  to {
-    background-color: transparent;
-  }
+  from { background-color: yellow; }
+  to { background-color: transparent; }
 }
 
-#flashMessage {
-  animation: yellowfade 3s ease-in-out;
-  padding: 10px;
-  margin: 10px auto;
-  width: fit-content;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.animate-fade {
+  animation: fade-in 0.3s ease-out, yellowfade 3s ease-in-out;
+}
+
+/* Smooth transitions for navigation */
+nav a {
+  transition: color 0.2s ease;
 }
 </style>

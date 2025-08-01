@@ -18,7 +18,7 @@ const { message } = storeToRefs(store)
       >
         <h4 class="font-medium">{{ message }}</h4>
       </div>
-
+      <h1>Deploy with Vercel</h1>
       <!-- Navigation -->
       <div>
         <nav class="py-6 space-x-4 transition-colors">

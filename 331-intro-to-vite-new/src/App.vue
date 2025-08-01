@@ -8,42 +8,55 @@ const { message } = storeToRefs(store)
 </script>
 
 <template>
-  <div id="text-center font-sans text-gay-700 antialias">
+  <div id="text-center font-sans text-gray-700 antialiased">
     <header>
-       <div id="flashMessage" v-if="message">
+      <div id="flashMessage" v-if="message">
         <h4>{{ message }}</h4>
       </div>
       <div class="wrapper">
-        <nav>
-         <RouterLink :to="{ name: 'event-list-view' }">Event</RouterLink>
-          <RouterLink :to="{ name: 'about' }">About</RouterLink>
-          <RouterLink :to="{ name: 'Students' }">Students</RouterLink>
-
+        <nav class="py-6">
+          <RouterLink
+            class="font-bold text-gray-700"
+            exact-active-class="text-green-500"
+            :to="{ name: 'event-list-view' }"
+          >Event</RouterLink>
+          |
+          <RouterLink
+            class="font-bold text-gray-700"
+            exact-active-class="text-green-500"
+            :to="{ name: 'about' }"
+          >About</RouterLink>
+          |
+          <RouterLink
+            class="font-bold text-gray-700"
+            exact-active-class="text-green-500"
+            :to="{ name: 'Students' }"
+          >Students</RouterLink>
         </nav>
       </div>
     </header>
 
-    <RouterView/>
+    <RouterView />
   </div>
 </template>
 
-<style >
-
-nav{
+<style>
+nav {
   padding: 30px;
 }
 
 nav a {
   font-weight: bold;
-  color:#2c3e50;
+  color: #2c3e50;
 }
-nav a.router-link-exact-active{
-color: #42b983;
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 
-h2{
+h2 {
   font-size: 20px;
 }
+
 .event-card {
   border: 1px solid #ccc;
   padding: 20px;
@@ -51,6 +64,7 @@ h2{
   width: 300px;
   text-align: center;
 }
+
 @keyframes yellowfade {
   from {
     background-color: yellow;
@@ -68,5 +82,4 @@ h2{
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
-
 </style>

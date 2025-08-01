@@ -7,7 +7,11 @@ export default {
     "./node_modules/flowbite-vue/**/*.{js,ts}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow:{
+        'sp':'0 3px 12px 0 rgba(0, 0, 0, 0.2)'
+      }
+    },
   },
   plugins: [],
 } satisfies Config

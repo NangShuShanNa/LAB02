@@ -82,7 +82,7 @@ watchEffect(fetchEvents)
       >
     </div>
 
-    <div class="events">
+    <div class="flex flex-col items-center">
       <div v-for="event in events" :key="event.id" class="event-item">
         <EventCard :event="event" />
         <CategoryOrganizer :event="event" />
@@ -112,13 +112,7 @@ watchEffect(fetchEvents)
 </template>
 
 <style scoped>
-.events {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
+
 
 .event-item {
   width: 100%;

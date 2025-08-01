@@ -7,7 +7,6 @@ inject()
 import App from './App.vue'
 import router from './router'
 import 'nprogress/nprogress.css'
-import { Analytics } from '@vercel/analytics/next'
 
 const app = createApp(App)
 

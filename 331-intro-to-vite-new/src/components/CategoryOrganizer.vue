@@ -1,5 +1,5 @@
 <template>
-  <div class="category-organizer">
+  <div class="w-full text-right text-sm mt-2 pr-4">
     <div>{{ event.category }}</div>
     <div>{{ event.organizer }}</div>
   </div>
@@ -12,13 +12,3 @@ defineProps<{
   event: Event
 }>()
 </script>
-
-<style scoped>
-.category-organizer {
-  text-align: right;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  width: 100%;
-  padding-right: 1rem;
-}
-</style>

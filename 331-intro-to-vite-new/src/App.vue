@@ -14,14 +14,14 @@ const { message } = storeToRefs(store)
       <!-- Flash Message -->
       <div
         v-if="message"
-        class="animate-fade bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg shadow-sm mb-6 mx-auto max-w-md"
+        class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg shadow-sm mb-6 mx-auto max-w-md transition-opacity duration-300 animate-[fade-in_0.3s_ease-out,yellowfade_3s_ease-in-out]"
       >
         <h4 class="font-medium">{{ message }}</h4>
       </div>
 
       <!-- Navigation -->
-      <div class="wrapper">
-        <nav class="py-6 space-x-4">
+      <div>
+        <nav class="py-6 space-x-4 transition-colors">
           <RouterLink
             class="px-3 py-2 font-bold text-gray-700 hover:text-green-500 transition-colors"
             exact-active-class="text-green-500"
@@ -54,8 +54,8 @@ const { message } = storeToRefs(store)
   </div>
 </template>
 
+<!-- Tailwind animations via custom keyframes -->
 <style>
-/* Animation for flash message */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -64,14 +64,5 @@ const { message } = storeToRefs(store)
 @keyframes yellowfade {
   from { background-color: yellow; }
   to { background-color: transparent; }
-}
-
-.animate-fade {
-  animation: fade-in 0.3s ease-out, yellowfade 3s ease-in-out;
-}
-
-/* Smooth transitions for navigation */
-nav a {
-  transition: color 0.2s ease;
 }
 </style>

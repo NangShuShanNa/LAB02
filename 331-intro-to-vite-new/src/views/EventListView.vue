@@ -10,12 +10,10 @@ import nProgress from 'nprogress'
 const route = useRoute()
 const router = useRouter()
 
-// Reactive state
 const events = ref<Event[] | null>(null)
 const totalEvents = ref<number>(0)
-const customPageSize = ref<number>(3) // ✅ Default to 3
+const customPageSize = ref<number>(3)
 
-// Props from route
 const props = defineProps({
   page: {
     type: Number,
@@ -23,15 +21,13 @@ const props = defineProps({
   }
 })
 
-// Computed values
 const page = computed(() => props.page)
 
 const hasNextPage = computed(() => {
-  const totalPages = Math.ceil(totalEvents.value / 3) // ✅ Adjusted
+  const totalPages = Math.ceil(totalEvents.value / 3)
   return page.value < totalPages
 })
 
-// Update page size via query
 const updatePageSize = () => {
   const size = Math.min(Math.max(1, customPageSize.value), 100)
   customPageSize.value = size
@@ -42,11 +38,10 @@ const updatePageSize = () => {
   })
 }
 
-// Fetch event data
 const fetchEvents = () => {
   nProgress.start()
 
-  EventService.getEvents(3, page.value) // ✅ Fixed to use 3
+  EventService.getEvents(3, page.value)
     .then((response) => {
       events.value = response.data
       totalEvents.value = Number(response.headers['x-total-count']) || 0
@@ -60,41 +55,40 @@ const fetchEvents = () => {
     })
 }
 
-// Init fetch
 onMounted(fetchEvents)
 watchEffect(fetchEvents)
 </script>
 
-
 <template>
-  <div>
-    <h1>Events For Good</h1>
+  <div class="px-4 py-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Events For Good</h1>
 
-    <div class="page-size-selector">
-      <span>Items per page: </span>
+    <div class="flex items-center gap-2 mb-4">
+      <span>Items per page:</span>
       <input
         type="number"
         v-model.number="customPageSize"
         @change="updatePageSize"
         min="1"
         max="100"
-        class="page-size-input"
+        class="w-16 px-2 py-1 border border-gray-300 rounded"
       >
     </div>
 
     <div class="flex flex-col items-center">
-      <div v-for="event in events" :key="event.id" class="event-item">
+      <div v-for="event in events" :key="event.id" class="w-full max-w-[250px]">
         <EventCard :event="event" />
         <CategoryOrganizer :event="event" />
       </div>
     </div>
 
-    <div class="pagination">
+    <div class="flex justify-center gap-6 font-bold w-[290px] mt-6 text-gray-800">
       <RouterLink
         id="page-prev"
         :to="{ name: 'event-list-view', query: { ...route.query, page: page - 1 } }"
         rel="prev"
         v-if="page !== 1"
+        class="flex-1 text-left no-underline"
       >
         &#60; Prev Page
       </RouterLink>
@@ -104,55 +98,10 @@ watchEffect(fetchEvents)
         :to="{ name: 'event-list-view', query: { ...route.query, page: page + 1 } }"
         rel="next"
         v-if="hasNextPage"
+        class="flex-1 text-right no-underline"
       >
         Next Page &#62;
       </RouterLink>
     </div>
   </div>
 </template>
-
-<style scoped>
-
-
-.event-item {
-  width: 100%;
-  max-width: 250px;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  font-weight: bold;
-  width: 290px;
-}
-
-.pagination a {
-  flex: 1;
-  text-decoration: none;
-  color: #2c3e50;
-  font-weight: bold;
-}
-
-#page-prev {
-  text-align: left;
-}
-
-#page-next {
-  text-align: right;
-}
-
-.page-size-selector {
-  margin: 1rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.page-size-input {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  width: 60px;
-}
-</style>
